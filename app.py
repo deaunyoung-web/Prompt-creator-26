@@ -26,17 +26,11 @@ template_map = {
 
 # --- Utility Functions ---
 def parse_with_regex(raw_text):
-    patterns = {
-        "track_name": r"(?:track|song|beat|title)[:=\s]+([^"
-]+)",
-        "metrics_data": r"(?:metrics|stats|data)[:=\s]+([^
-]+)",
-        "product_name": r"(?:product|item)[:=\s]+([^
-]+)",
-        "order_number": r"(?:order|#)[:=\s]+([^
-]+)",
-        "order_status": r"(?:status)[:=\s]+([^
-]+)"
+ patterns = {
+        "track_name": r"(?:track|song|beat|title)[:=\s]+([^\"\n]+)",
+        "metrics_data": r"(?:metrics|stats|data)[:=\s]+([^\"\n]+)",
+        "product_name": r"(?:product|item)[:=\s]+([^\"\n]+)",
+        "order_number": r"(?:order|#)[:=\s]+([^\"\n]+)"
     }
     return {k: re.search(p, raw_text, re.IGNORECASE).group(1).strip() 
             for k, p in patterns.items() if re.search(p, raw_text, re.IGNORECASE)}
