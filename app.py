@@ -32,7 +32,7 @@ def parse_with_regex(raw_text):
         "product_name": r"(?:product|item)[:=\s]+([^\"\n]+)",
         "order_number": r"(?:order|#)[:=\s]+([^\"\n]+)"
     }
-    return {k: re.search(p, raw_text, re.IGNORECASE).group(1).strip() 
+return {k: re.search(p, raw_text, re.IGNORECASE).group(1).strip() 
             for k, p in patterns.items() if re.search(p, raw_text, re.IGNORECASE)}
 
 def smart_extract_with_ai(raw_text):
