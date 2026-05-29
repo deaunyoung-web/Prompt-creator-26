@@ -27,7 +27,7 @@ template_map = {
 # --- Utility Functions ---
 def parse_with_regex(raw_text):
     patterns = {
-        "track_name": r"(?:track|song|beat|title)[:=\s]+([^
+        "track_name": r"(?:track|song|beat|title)[:=\s]+([^"
 ]+)",
         "metrics_data": r"(?:metrics|stats|data)[:=\s]+([^
 ]+)",
