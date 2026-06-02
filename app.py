@@ -49,3 +49,41 @@ st.title("🚀 Multi-Purpose Prompt Creator")
 
 # --- Dependencies Fix ---
 # Add 'google-generativeai' to your requirements.txt file on GitHub as well!
+# --- User Interface ---
+st.write("Welcome back! Select your role and task to generate an optimized prompt.")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    identity = st.selectbox("Select Role", list(template_map.keys()))
+
+with col2:
+    task = st.selectbox("Select Task", list(template_map[identity].keys()))
+
+raw_input = st.text_area("Paste your raw notes, stats, or information here:", height=150)
+
+if st.button("Generate Prompt", type="primary"):
+    if raw_input.strip() == "":
+        st.warning("Please paste some text to generate a prompt.")
+    else:
+        with st.spinner("Extracting details and generating prompt..."):
+            # Try to extract data using AI, fallback to Regex if needed
+            extracted_data = smart_extract_with_ai(raw_input)
+            if not extracted_data:
+                extracted_data = parse_with_regex(raw_input)
+            
+            # Fetch the correct template
+            template = template_map[identity][task]
+            
+            # Safely replace variables in the template
+            final_prompt = template
+            for key, value in extracted_data.items():
+                final_prompt = final_prompt.replace(f"{{{key}}}", str(value))
+            
+            # Show the final result
+            st.success("✅ Prompt Ready!")
+            st.code(final_prompt, language="markdown")
+            
+            # Let you see what the AI found
+            with st.expander("View Extracted Data"):
+                st.json(extracted_data)
