@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Empire OS — D'eaun Young × H.N.I Beatz</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c8a96e;
+  --gold-l: #e8c98a;
+  --gold-dim: rgba(200,169,110,0.12);
+  --gold-border: rgba(200,169,110,0.25);
+  --bg: #070707;
+  --bg2: #0e0e0e;
+  --bg3: #151515;
+  --bg4: #1c1c1c;
+  --bg5: #222222;
+  --border: #1e1e1e;
+  --border2: #2a2a2a;
+  --text: #f0ece4;
+  --text2: #888580;
+  --text3: #444;
+  --music: #8b9cf0;
+  --music-bg: rgba(139,156,240,0.08);
+  --essence: #82dba0;
+  --essence-bg: rgba(130,219,160,0.08);
+  --lamp: #e09f78;
+  --lamp-bg: rgba(224,159,120,0.08);
+  --danger: #e07878;
+  --success: #78e0a0;
+  --r: 6px;
+  --rl: 10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+
+/* SETUP SCREEN */
+#setupScreen{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;padding:2rem}
+.setup-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:2.5rem;max-width:480px;width:100%;text-align:center}
+.setup-crown{font-size:3rem;margin-bottom:1rem}
+.setup-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:.5rem}
+.setup-sub{font-size:.85rem;color:var(--text2);margin-bottom:2rem;line-height:1.6}
+.setup-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:'DM Mono',monospace;font-size:.82rem;padding:.8rem 1rem;margin-bottom:1rem;transition:border-color .2s}
+.setup-input:focus{outline:none;border-color:var(--gold-border)}
+.setup-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#070707;font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;border:none;border-radius:var(--r);padding:.85rem;cursor:pointer;transition:all .2s;letter-spacing:.04em}
+.setup-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,169,110,.3)}
+.setup-note{font-size:.72rem;color:var(--text3);margin-top:1rem;line-height:1.5}
+
+/* SHELL */
+.shell{display:grid;grid-template-columns:260px 1fr;grid-template-rows:56px 1fr;min-height:100vh;display:none}
+
+/* TOPBAR */
+.topbar{grid-column:1/-1;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;position:sticky;top:0;z-index:100}
+.tb-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:10px}
+.tb-brand em{color:var(--gold);font-style:normal}
+.tb-sub{font-size:.65rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:1.2rem}
+.momentum-pill{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.75rem}
+.momentum-score{font-family:'Syne',sans-serif;font-weight:700;color:var(--gold);font-size:.95rem}
+.countdown-pill{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--text2)}
+.countdown-pill strong{color:var(--danger);font-family:'Syne',sans-serif}
+.tb-key-btn{background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:.7rem;padding:3px 8px;cursor:pointer;transition:all .15s}
+.tb-key-btn:hover{border-color:var(--border2);color:var(--text2)}
+
+/* SIDEBAR */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding-bottom:2rem}
+.sb-section{padding:.5rem .75rem .25rem}
+.sb-label{font-size:.6rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);padding:.8rem .5rem .3rem}
+.sb-persona{display:flex;align-items:center;gap:8px;padding:.6rem .75rem;border-radius:var(--r);border:1px solid transparent;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:.83rem;cursor:pointer;transition:all .15s;width:100%;text-align:left}
+.sb-persona:hover{background:var(--bg3);color:var(--text)}
+.sb-persona.active-music{background:var(--music-bg);border-color:rgba(139,156,240,.25);color:var(--music)}
+.sb-persona.active-essence{background:var(--essence-bg);border-color:rgba(130,219,160,.25);color:var(--essence)}
+.sb-persona.active-lamp{background:var(--lamp-bg);border-color:rgba(224,159,120,.25);color:var(--lamp)}
+.sb-divider{border:none;border-top:1px solid var(--border);margin:.6rem .75rem}
+.sb-module{display:flex;align-items:center;gap:8px;padding:.55rem .75rem;border-radius:var(--r);border:1px solid transparent;background:transparent;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;transition:all .15s;width:100%;text-align:left}
+.sb-module:hover{background:var(--bg3);color:var(--text2)}
+.sb-module.active{background:var(--bg3);border-color:var(--border2);color:var(--text)}
+.sb-module .mod-icon{width:22px;text-align:center;font-size:.9rem}
+.sb-module .mod-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:.6rem;padding:1px 5px;border-radius:10px;font-weight:600}
+
+/* MAIN */
+.main{overflow-y:auto;display:flex;flex-direction:column}
+.module-view{display:none;flex-direction:column;gap:0;min-height:100%}
+.module-view.active{display:flex}
+
+/* MODULE HEADER */
+.mod-header{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border);background:var(--bg2)}
+.mod-eyebrow{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem}
+.mod-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;display:flex;align-items:center;gap:.6rem}
+.mod-desc{font-size:.83rem;color:var(--text2);margin-top:.4rem;line-height:1.6}
+.mod-body{padding:2rem 2.5rem;flex:1;display:flex;flex-direction:column;gap:1.5rem}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem}
+.card-title{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.card-grid{display:grid;gap:1rem}
+.card-grid-2{grid-template-columns:1fr 1fr}
+.card-grid-3{grid-template-columns:1fr 1fr 1fr}
+
+/* INPUTS */
+.field-group{display:flex;flex-direction:column;gap:5px}
+.field-label{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text2)}
+.field-input,.field-textarea,.field-select{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;padding:.65rem .85rem;transition:border-color .2s,box-shadow .2s;width:100%}
+.field-input:focus,.field-textarea:focus,.field-select:focus{outline:none;border-color:var(--gold-border);box-shadow:0 0 0 3px var(--gold-dim)}
+.field-input::placeholder,.field-textarea::placeholder{color:var(--text3)}
+.field-textarea{resize:vertical;min-height:90px;line-height:1.6}
+.field-select{cursor:pointer}
+.field-select option{background:var(--bg3)}
+
+/* BUTTONS */
+.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.05em;border:none;border-radius:var(--r);padding:.65rem 1.4rem;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:7px}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#070707}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(200,169,110,.3)}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg4);color:var(--text);border-color:var(--border2)}
+.btn-danger{background:rgba(224,120,120,.1);color:var(--danger);border:1px solid rgba(224,120,120,.2)}
+.btn-row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+.btn-full{width:100%;justify-content:center}
+
+/* AI OUTPUT */
+.ai-output{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--r);padding:1.4rem;font-size:.88rem;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;position:relative;display:none;animation:fadeUp .3s ease}
+.ai-output.show{display:block}
+.ai-output-actions{position:absolute;top:.75rem;right:.75rem;display:flex;gap:.4rem}
+.copy-btn{background:var(--bg4);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:.7rem;padding:3px 9px;cursor:pointer;transition:all .15s}
+.copy-btn:hover{background:var(--gold-dim);color:var(--gold);border-color:var(--gold-border)}
+
+/* LOADING */
+.ai-loading{display:none;align-items:center;gap:10px;padding:1rem;color:var(--text2);font-size:.83rem}
+.ai-loading.show{display:flex}
+.spinner{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* WARNING */
+.warning{background:rgba(224,180,78,.06);border:1px solid rgba(224,180,78,.2);border-radius:var(--r);padding:.65rem 1rem;font-size:.8rem;color:#e0b44e;display:none}
+.warning.show{display:block}
+
+/* TIP */
+.tip{background:linear-gradient(135deg,rgba(200,169,110,.05),rgba(200,169,110,.02));border:1px solid rgba(200,169,110,.12);border-radius:var(--r);padding:.85rem 1rem;font-size:.8rem;color:var(--gold);line-height:1.6;display:flex;gap:8px}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:2px;font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.badge-music{background:var(--music-bg);color:var(--music);border:1px solid rgba(139,156,240,.2)}
+.badge-essence{background:var(--essence-bg);color:var(--essence);border:1px solid rgba(130,219,160,.2)}
+.badge-lamp{background:var(--lamp-bg);color:var(--lamp);border:1px solid rgba(224,159,120,.2)}
+.badge-gold{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border)}
+
+/* STAT BOXES */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--gold)}
+.stat-lbl{font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+.stat-sub{font-size:.72rem;color:var(--text2);margin-top:.3rem}
+
+/* FOCUS ENGINE */
+.focus-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;position:relative;overflow:hidden}
+.focus-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-l),transparent)}
+.focus-priority{font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.focus-action{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.4rem}
+.focus-why{font-size:.82rem;color:var(--text2);line-height:1.6}
+
+/* INVENTORY */
+.inv-table{width:100%;border-collapse:collapse}
+.inv-table th{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);font-weight:500;padding:.6rem .75rem;text-align:left;border-bottom:1px solid var(--border)}
+.inv-table td{padding:.7rem .75rem;font-size:.84rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.inv-table tr:last-child td{border-bottom:none}
+.inv-table tr:hover td{background:var(--bg3)}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px}
+.dot-ready{background:var(--success)}
+.dot-low{background:#e0b44e}
+.dot-out{background:var(--danger)}
+.dot-pending{background:var(--music)}
+
+/* BEAT LAB */
+.drop-zone{border:2px dashed var(--border2);border-radius:var(--rl);padding:2.5rem;text-align:center;transition:all .2s;cursor:pointer;background:var(--bg3)}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--gold-border);background:var(--gold-dim)}
+.drop-icon{font-size:2.5rem;margin-bottom:.75rem}
+.drop-text{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.4rem}
+.drop-sub{font-size:.78rem;color:var(--text3)}
+
+/* IDEA VAULT */
+.idea-input-row{display:flex;gap:.75rem}
+.idea-list{display:flex;flex-direction:column;gap:.6rem}
+.idea-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem;display:flex;align-items:flex-start;gap:.75rem;transition:border-color .15s}
+.idea-item:hover{border-color:var(--border2)}
+.idea-content{flex:1}
+.idea-text{font-size:.85rem;line-height:1.5;margin-bottom:.3rem}
+.idea-meta{font-size:.7rem;color:var(--text3)}
+.idea-del{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:.9rem;padding:2px;transition:color .15s;flex-shrink:0}
+.idea-del:hover{color:var(--danger)}
+
+/* SALES PULSE */
+.sale-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.75rem;align-items:end}
+.sale-list{display:flex;flex-direction:column;gap:.5rem;max-height:300px;overflow-y:auto}
+.sale-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;font-size:.83rem}
+.sale-amount{font-family:'Syne',sans-serif;font-weight:700;color:var(--success);font-size:.95rem;margin-left:auto}
+
+/* WAR ROOM */
+.war-week{margin-bottom:1.5rem}
+.war-week-title{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.war-tasks{display:flex;flex-direction:column;gap:.5rem}
+.war-task{display:flex;align-items:center;gap:.75rem;padding:.65rem .85rem;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:.83rem;cursor:pointer;transition:all .15s}
+.war-task:hover{border-color:var(--border2)}
+.war-task.done{opacity:.45;text-decoration:line-through;color:var(--text3)}
+.war-check{width:16px;height:16px;border:1px solid var(--border2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;transition:all .15s}
+.war-task.done .war-check{background:var(--success);border-color:var(--success);color:#070707}
+.war-biz{font-size:.65rem;padding:2px 7px;border-radius:2px;margin-left:auto;flex-shrink:0}
+
+/* VIDEO BRIEF */
+.platform-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.ptab{background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:.72rem;padding:4px 10px;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.ptab.active{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+
+/* CONTENT FACTORY */
+.platform-output{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:.75rem;display:none;animation:fadeUp .25s ease}
+.platform-output.show{display:block}
+.platform-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.platform-name{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)}
+.platform-text{font-size:.85rem;line-height:1.75;color:var(--text);white-space:pre-wrap}
+
+/* MOBILE */
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:.4rem .5rem;z-index:200;gap:.25rem}
+.mob-btn{flex:1;padding:.45rem .25rem;background:transparent;border:none;color:var(--text3);font-size:.6rem;cursor:pointer;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .15s;font-family:'DM Sans',sans-serif}
+.mob-btn.active{color:var(--gold);background:var(--gold-dim)}
+.mob-icon{font-size:.95rem}
+
+/* DRAWER */
+.drawer{display:none;position:fixed;inset:0;z-index:150}
+.drawer.open{display:flex}
+.drawer-bd{position:absolute;inset:0;background:rgba(0,0,0,.75)}
+.drawer-panel{position:absolute;bottom:64px;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);border-radius:var(--rl) var(--rl) 0 0;padding:1.2rem 1rem;max-height:75vh;overflow-y:auto}
+.drawer-handle{width:32px;height:3px;background:var(--border2);border-radius:2px;margin:0 auto 1rem}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* KEY MODAL */
+.key-modal{display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;padding:1.5rem;background:rgba(0,0,0,.85)}
+.key-modal.open{display:flex}
+.key-modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:2rem;width:100%;max-width:440px;animation:fadeUp .25s ease}
+.key-modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:.4rem;display:flex;align-items:center;gap:8px}
+.key-modal-sub{font-size:.8rem;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+.key-modal-current{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.65rem 1rem;font-size:.75rem;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:1rem;word-break:break-all}
+.key-modal-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Mono',monospace;font-size:.82rem;padding:.75rem 1rem;margin-bottom:1rem;transition:border-color .2s}
+.key-modal-input:focus{outline:none;border-color:var(--gold-border);box-shadow:0 0 0 3px var(--gold-dim)}
+.key-modal-input::placeholder{color:var(--text3)}
+.key-modal-btns{display:flex;gap:.75rem}
+.key-modal-save{flex:1;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#070707;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;border:none;border-radius:var(--r);padding:.7rem;cursor:pointer;transition:all .2s}
+.key-modal-save:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(200,169,110,.3)}
+.key-modal-cancel{background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-radius:var(--r);padding:.7rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;transition:all .15s}
+.key-modal-cancel:hover{background:var(--bg4);color:var(--text)}
+.key-modal-status{font-size:.75rem;margin-top:.75rem;padding:.5rem .75rem;border-radius:var(--r);display:none}
+.key-modal-status.success{display:block;background:rgba(120,224,160,.08);border:1px solid rgba(120,224,160,.2);color:var(--success)}
+.key-modal-status.error{display:block;background:rgba(224,120,120,.08);border:1px solid rgba(224,120,120,.2);color:var(--danger)}
+
+@media(max-width:768px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{padding-bottom:70px}
+  .mob-nav{display:flex}
+  .mod-header{padding:1.2rem 1rem 1rem}
+  .mod-body{padding:1rem}
+  .mod-title{font-size:1.2rem}
+  .card-grid-2,.card-grid-3,.stat-row,.sale-form{grid-template-columns:1fr}
+  .tb-right .countdown-pill{display:none}
+  .idea-input-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="setupScreen">
+  <div class="setup-box">
+    <div class="setup-crown">👑</div>
+    <div class="setup-title">Empire <span style="color:var(--gold)">OS</span></div>
+    <p class="setup-sub">D'eaun Young × H.N.I Beatz<br>Your AI-powered command center for 3 businesses.</p>
+    <input type="password" class="setup-input" id="apiKeyInput" placeholder="Paste your Anthropic API key (sk-ant-...)" />
+    <button class="setup-btn" onclick="initApp()">⚡ Launch Empire OS</button>
+    <p class="setup-note">Your key is stored only in your browser's local storage.<br>Never shared. Never logged. Rotate at console.anthropic.com</p>
+  </div>
+</div>
+
+<!-- MAIN SHELL -->
+<div class="shell" id="shell">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="tb-brand">
+      <span>👑</span>
+      <div>
+        <div>Empire <em>OS</em></div>
+        <div class="tb-sub">D'eaun × H.N.I</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <div class="countdown-pill">🎯 Day <strong id="dayCount">1</strong> of 30</div>
+      <div class="momentum-pill">⚡ <span class="momentum-score" id="momentumScore">0</span></div>
+      <button class="tb-key-btn" onclick="resetKey()">🔑 Key</button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-label">Business</div>
+    <div class="sb-section">
+      <button class="sb-persona" id="pb-music" onclick="setPersona('music')">🎵 H.N.I Beatz</button>
+      <button class="sb-persona" id="pb-essence" onclick="setPersona('essence')">🌿 Collective Essence</button>
+      <button class="sb-persona" id="pb-lamp" onclick="setPersona('lamp')">💡 Lamp Business</button>
+    </div>
+    <hr class="sb-divider">
+    <div class="sb-label">Modules</div>
+    <div class="sb-section">
+      <button class="sb-module active" id="mod-focus" onclick="showModule('focus')"><span class="mod-icon">🎯</span> Focus Engine</button>
+      <button class="sb-module" id="mod-content" onclick="showModule('content')"><span class="mod-icon">⚡</span> Content Factory</button>
+      <button class="sb-module" id="mod-beat" onclick="showModule('beat')"><span class="mod-icon">🎵</span> Beat Intelligence</button>
+      <button class="sb-module" id="mod-inventory" onclick="showModule('inventory')"><span class="mod-icon">📦</span> Inventory</button>
+      <button class="sb-module" id="mod-ideas" onclick="showModule('ideas')"><span class="mod-icon">💡</span> Idea Vault</button>
+      <button class="sb-module" id="mod-video" onclick="showModule('video')"><span class="mod-icon">🎬</span> Video Brief</button>
+      <button class="sb-module" id="mod-sales" onclick="showModule('sales')"><span class="mod-icon">📊</span> Sales Pulse</button>
+      <button class="sb-module" id="mod-warroom" onclick="showModule('warroom')"><span class="mod-icon">🗓</span> 90-Day War Room</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="mainArea">
+
+    <!-- ═══ FOCUS ENGINE ═══ -->
+    <div class="module-view active" id="view-focus">
+      <div class="mod-header">
+        <div class="mod-eyebrow">Daily Briefing</div>
+        <div class="mod-title">🎯 Focus Engine</div>
+        <div class="mod-desc">Your AI tells you exactly what to work on today across all 3 businesses.</div>
+      </div>
+      <div class="mod-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num" id="focusSalesCount">0</div>
+            <div class="stat-lbl">Sales Logged</div>
+            <div class="stat-sub">This month</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="focusIdeasCount">0</div>
+            <div class="stat-lbl">Ideas Captured</div>
+            <div class="stat-sub">In vault</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="focusTaskCount">0</div>
+            <div class="stat-lbl">Tasks Done</div>
+            <div class="stat-sub">War room</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📋 What's Your Status Today?</div>
+          <div class="card-grid card-grid-2">
+            <div class="field-group">
+              <label class="field-label">What did you work on last?</label>
+              <input class="field-input" id="focusLast" placeholder="e.g. posted a beat on IG, listed jewelry..." />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Biggest challenge right now</label>
+              <input class="field-input" id="focusChallenge" placeholder="e.g. no sales, no time, no content..." />
+            </div>
+          </div>
+          <div style="margin-top:1rem" class="btn-row">
+            <button class="btn btn-gold" onclick="runFocusEngine()">🎯 Get Today's Focus Plan</button>
+          </div>
+        </div>
+
+        <div class="ai-loading" id="focus-loading"><div class="spinner"></div> Analyzing your empire...</div>
+        <div class="ai-output" id="focus-output">
+          <div class="ai-output-actions"><button class="copy-btn" onclick="copyEl('focus-output')">Copy</button></div>
+        </div>
+
+        <div id="focusAlerts"></div>
+      </div>
+    </div>
+
+    <!-- ═══ CONTENT FACTORY ═══ -->
+    <div class="module-view" id="view-content">
+      <div class="mod-header">
+        <div class="mod-eyebrow">AI Content</div>
+        <div class="mod-title">⚡ Content Factory</div>
+        <div class="mod-desc">One input. Five platforms. Captions, hooks, hashtags — all generated simultaneously.</div>
+      </div>
+      <div class="mod-body">
+        <div class="card">
+          <div class="card-title">What are you promoting?</div>
+          <div class="card-grid card-grid-2">
+            <div class="field-group">
+              <label class="field-label">Business</label>
+              <select class="field-select" id="cfBiz">
+                <option value="H.N.I Beatz (beats & music production)">🎵 H.N.I Beatz</option>
+                <option value="Collective Essence (handmade jewelry)">🌿 Collective Essence</option>
+                <option value="Lamp Business (handmade artisan lamps)">💡 Lamp Business</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Content Type</label>
+              <select class="field-select" id="cfType">
+                <option>New product/beat drop</option>
+                <option>Restock announcement</option>
+                <option>Behind the scenes</option>
+                <option>Customer testimonial</option>
+                <option>Sale or promotion</option>
+                <option>Personal brand story</option>
+                <option>Educational/tip post</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Product/Beat Name</label>
+              <input class="field-input" id="cfProduct" placeholder="e.g. Midnight Soul, Gold Hoop Set..." />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Key Detail or Hook Idea</label>
+              <input class="field-input" id="cfDetail" placeholder="e.g. handmade with 14k gold, dark trap vibe..." />
+            </div>
+          </div>
+          <div style="margin-top:1rem">
+            <label class="field-label" style="margin-bottom:.5rem;display:block">Platforms</label>
+            <div class="platform-tabs">
+              <div class="ptab active" data-p="Instagram" onclick="togglePlatform(this)">📸 Instagram</div>
+              <div class="ptab active" data-p="TikTok" onclick="togglePlatform(this)">🎵 TikTok</div>
+              <div class="ptab active" data-p="YouTube" onclick="togglePlatform(this)">▶️ YouTube</div>
+              <div class="ptab active" data-p="Facebook" onclick="togglePlatform(this)">👥 Facebook</div>
+              <div class="ptab active" data-p="Twitter/X" onclick="togglePlatform(this)">✕ Twitter/X</div>
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top:1rem">
+            <button class="btn btn-gold" onclick="runContentFactory()">⚡ Generate All Platforms</button>
+            <button class="btn btn-ghost" onclick="clearContent()">Clear</button>
+          </div>
+        </div>
+
+        <div class="ai-loading" id="content-loading"><div class="spinner"></div> Writing for all platforms...</div>
+        <div class="warning" id="content-warning">⚠️ Fill in the product name to generate content.</div>
+        <div id="platformOutputs"></div>
+      </div>
+    </div>
+
+    <!-- ═══ BEAT INTELLIGENCE ═══ -->
+    <div class="module-view" id="view-beat">
+      <div class="mod-header">
+        <div class="mod-eyebrow">H.N.I Beatz</div>
+        <div class="mod-title">🎵 Beat Intelligence Lab</div>
+        <div class="mod-desc">Drop an audio file or enter beat details. AI generates SEO, tags, BPM analysis, licensing pitch, and platform strategy.</div>
+      </div>
+      <div class="mod-body">
+        <div class="card">
+          <div class="card-title">🎧 Beat Details</div>
+          <div class="drop-zone" id="dropZone" onclick="document.getElementById('audioFile').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+            <div class="drop-icon">🎵</div>
+            <div class="drop-text">Drop MP3 or WAV here</div>
+            <div class="drop-sub">Or click to browse — filename is used for AI analysis</div>
+          </div>
+          <input type="file" id="audioFile" accept=".mp3,.wav" style="display:none" onchange="fileSelected(event)" />
+          <div id="fileInfo" style="margin-top:.75rem;display:none">
+            <div class="tip"><span>🎵</span><span id="fileInfoText"></span></div>
+          </div>
+          <div class="card-grid card-grid-2" style="margin-top:1rem">
+            <div class="field-group">
+              <label class="field-label">Beat Name</label>
+              <input class="field-input" id="beatName" placeholder="e.g. Midnight Soul, Dark November..." />
+            </div>
+            <div class="field-group">
+              <label class="field-label">BPM (if known)</label>
+              <input class="field-input" id="beatBpm" placeholder="e.g. 90, 140, unknown..." />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Vibe / Style</label>
+              <input class="field-input" id="beatVibe" placeholder="e.g. dark trap, chill lo-fi, boom bap..." />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Target Artist Type</label>
+              <input class="field-input" id="beatArtist" placeholder="e.g. emotional rapper, R&B singer..." />
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top:1rem">
+            <button class="btn btn-gold" onclick="runBeatLab()">🔬 Analyze & Generate</button>
+          </div>
+        </div>
+        <div class="ai-loading" id="beat-loading"><div class="spinner"></div> Analyzing beat DNA...</div>
+        <div class="ai-output" id="beat-output">
+          <div class="ai-output-actions"><button class="copy-btn" onclick="copyEl('beat-output')">Copy All</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ INVENTORY ═══ -->
+    <div class="module-view" id="view-inventory">
+      <div class="mod-header">
+        <div class="mod-eyebrow">Stock Management</div>
+        <div class="mod-title">📦 Inventory Command</div>
+        <div class="mod-desc">Track all products across all 3 businesses. Dead stock alerts fire automatically after 7 days without a content push.</div>
+      </div>
+      <div class="mod-body">
+        <div class="card">
+          <div class="card-title">➕ Add Item</div>
+          <div class="card-grid card-grid-3">
+            <div class="field-group">
+              <label class="field-label">Item Name</label>
+              <input class="field-input" id="invName" placeholder="Product or beat name" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Business</label>
+              <select class="field-select" id="invBiz">
+                <option>H.N.I Beatz</option>
+                <option>Collective Essence</option>
+                <option>Lamp Business</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Price ($)</label>
+              <input class="field-input" id="invPrice" type="number" placeholder="0.00" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Quantity</label>
+              <input class="field-input" id="invQty" type="number" placeholder="1" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Status</label>
+              <select class="field-select" id="invStatus">
+                <option>Ready to sell</option>
+                <option>Low stock</option>
+                <option>Out of stock</option>
+                <option>Coming soon</option>
+              </select>
+            </div>
+            <div class="field-group" style="justify-content:flex-end">
+              <label class="field-label">&nbsp;</label>
+              <button class="btn btn-gold" onclick="addInventory()">Add Item</button>
+            </div>
+          </div>
+        </div>
+        <div id="deadStockAlerts"></div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="inv-table" id="invTable">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Business</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Status</th>
+                <th>Last Push</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="invBody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem;font-size:.83rem">No inventory yet. Add your first item above.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="runInventoryAI()">🤖 AI Restock & Pricing Advice</button>
+        </div>
+        <div class="ai-loading" id="inv-loading"><div class="spinner"></div> Analyzing inventory...</div>
+        <div class="ai-output" id="inv-output">
+          <div class="ai-output-actions"><button class="copy-btn" onclick="copyEl('inv-output')">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ IDEA VAULT ═══ -->
+    <div class="module-view" id="view-ideas">
+      <div class="mod-header">
+        <div class="mod-eyebrow">Capture Everything</div>
+        <div class="mod-title">💡 Idea Vault</div>
+        <div class="mod-desc">Capture any idea in 3 seconds. AI organizes it by business and revenue potential.</div>
+      </div>
+      <div class="mod-body">
+        <div class="card">
+          <div class="idea-input-row">
+            <input class="field-input" id="ideaInput" placeholder="Drop any idea here — product, beat concept, content idea, collab..." onkeydown="if(event.key==='Enter')addIdea()" style="flex:1" />
+            <button class="btn btn-gold" onclick="addIdea()">+ Capture</button>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="runIdeaAnalysis()">🤖 AI — Prioritize My Ideas</button>
+        </div>
+        <div class="ai-loading" id="idea-loading"><div class="spinner"></div> Analyzing ideas...</div>
+        <div class="ai-output" id="idea-output">
+          <div class="ai-output-actions"><button class="copy-btn" onclick="copyEl('idea-output')">Copy</button></div>
+        </div>
+        <div class="idea-list" id="ideaList"></div>
+      </div>
+    </div>
+
+    <!-- ═══ VIDEO BRIEF ═══ -->
+    <div class="module-view" id="view-video">
+      <div class="mod-header">
+        <div class="mod-eyebrow">Short Form + Long Form</div>
+        <div class="mod-title">🎬 Video Brief Generator</div>
+        <div class="mod-desc">Describe a video idea. AI writes the hook, script, B-roll list, caption, and posting strategy — ready to film.</div>
+      </div>
+      <div class="mod-body">
+        <div class="card">
+          <div class="card-grid card-grid-2">
+            <div class="field-group">
+              <label class="field-label">Business</label>
+              <select class="field-select" id="vidBiz">
+                <option>H.N.I Beatz</option>
+                <option>Collective Essence</option>
+                <option>Lamp Business</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Video Format</label>
+              <select class="field-select" id="vidFormat">
+                <option>TikTok / Reels (15-60 sec)</option>
+                <option>YouTube Short (60 sec)</option>
+                <option>YouTube Long Form (5-10 min)</option>
+                <option>Beat Visualizer Video</option>
+                <option>Product Showcase</option>
+                <option>Behind The Scenes</option>
+                <option>Day In The Life</option>
+              </select>
+            </div>
+            <div class="field-group" style="grid-column:1/-1">
+              <label class="field-label">Video Idea</label>
+              <textarea class="field-textarea" id="vidIdea" placeholder="Describe the video concept. e.g. 'showing how I make a beat from scratch using my phone' or 'packing a jewelry order with the unboxing experience'..."></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Goal</label>
+              <select class="field-select" id="vidGoal">
+                <option>Drive sales</option>
+                <option>Grow followers</option>
+                <option>Build brand awareness</option>
+                <option>Showcase craft/process</option>
+                <option>Go viral</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Tone</label>
+              <select class="field-select" id="vidTone">
+                <option>Authentic / raw</option>
+                <option>Hype / energetic</option>
+                <option>Calm / aesthetic</option>
+                <option>Educational</option>
+                <option>Funny / relatable</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top:1rem">
+            <button class="btn btn-gold" onclick="runVideoBrief()">🎬 Generate Video Brief</button>
+          </div>
+        </div>
+        <div class="ai-loading" id="video-loading"><div class="spinner"></div> Writing your video brief...</div>
+        <div class="ai-output" id="video-output">
+          <div class="ai-output-actions"><button class="copy-btn" onclick="copyEl('video-output')">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SALES PULSE ═══ -->
+    <div class="module-view" id="view-sales">
+      <div class="mod-header">
+        <div class="mod-eyebrow">Revenue Tracking</div>
+        <div class="mod-title">📊 Sales Pulse</div>
+        <div class="mod-desc">Log every sale, DM inquiry, and lead. AI spots your patterns and tells you exactly where to double down.</div>
+      </div>
+      <div class="mod-body">
+        <div class="card">
+          <div class="card-title">Log a Sale or Inquiry</div>
+          <div class="sale-form">
+            <div class="field-group">
+              <label class="field-label">Business</label>
+              <select class="field-select" id="saleBiz">
+                <option>H.N.I Beatz</option>
+                <option>Collective Essence</option>
+                <option>Lamp Business</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Item / Beat</label>
+              <input class="field-input" id="saleItem" placeholder="What sold?" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Amount ($)</label>
+              <input class="field-input" id="saleAmount" type="number" placeholder="0" />
+            </div>
+            <button class="btn btn-gold" onclick="logSale()" style="margin-top:1.2rem">Log</button>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num" id="totalRevenue">$0</div>
+            <div class="stat-lbl">Total Revenue</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="totalSales">0</div>
+            <div class="stat-lbl">Total Sales</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="topBizStat">—</div>
+            <div class="stat-lbl">Top Business</div>
+          </div>
+        </div>
+        <div class="sale-list" id="saleList"><p style="font-size:.82rem;color:var(--text3);padding:.5rem">No sales logged yet. Every dollar counts — log them all.</p></div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="runSalesAI()">🤖 AI Sales Analysis</button>
+        </div>
+        <div class="ai-loading" id="sales-loading"><div class="spinner"></div> Analyzing your revenue data...</div>
+        <div class="ai-output" id="sales-output">
+          <div class="ai-output-actions"><button class="copy-btn" onclick="copyEl('sales-output')">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ WAR ROOM ═══ -->
+    <div class="module-view" id="view-warroom">
+      <div class="mod-header">
+        <div class="mod-eyebrow">90-Day Restart Plan</div>
+        <div class="mod-title">🗓 War Room</div>
+        <div class="mod-desc">Your daily action plan to get the first sale in 30 days, build audience by 60, and launch full brand by 90.</div>
+      </div>
+      <div class="mod-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num" style="color:var(--danger)" id="wr-day">1</div>
+            <div class="stat-lbl">Current Day</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="wr-done">0</div>
+            <div class="stat-lbl">Tasks Complete</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="wr-pct">0%</div>
+            <div class="stat-lbl">Progress</div>
+          </div>
+        </div>
+        <div id="warRoomContent"></div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="runWarRoomAI()">🤖 AI — Customize My Plan</button>
+        </div>
+        <div class="ai-loading" id="warroom-loading"><div class="spinner"></div> Building your custom plan...</div>
+        <div class="ai-output" id="warroom-output">
+          <div class="ai-output-actions"><button class="copy-btn" onclick="copyEl('warroom-output')">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- KEY MANAGER MODAL -->
+<div class="key-modal" id="keyModal">
+  <div class="key-modal-box">
+    <div class="key-modal-title">🔑 API Key Manager</div>
+    <div class="key-modal-sub">Update your Anthropic API key below. Your key is stored only in this browser — never sent anywhere except Anthropic's servers directly.</div>
+    <div class="key-modal-current" id="keyModalCurrent">No key saved</div>
+    <input class="key-modal-input" id="keyModalInput" type="password" placeholder="Paste new key: sk-ant-api03-..." />
+    <div class="key-modal-btns">
+      <button class="key-modal-save" onclick="saveNewKey()">💾 Save Key</button>
+      <button class="key-modal-cancel" onclick="closeKeyModal()">Cancel</button>
+    </div>
+    <div class="key-modal-status" id="keyModalStatus"></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav class="mob-nav" id="mobNav">
+  <button class="mob-btn active" onclick="mobShow('focus',this)"><span class="mob-icon">🎯</span>Focus</button>
+  <button class="mob-btn" onclick="mobShow('content',this)"><span class="mob-icon">⚡</span>Content</button>
+  <button class="mob-btn" onclick="mobShow('beat',this)"><span class="mob-icon">🎵</span>Beat Lab</button>
+  <button class="mob-btn" onclick="mobShow('inventory',this)"><span class="mob-icon">📦</span>Stock</button>
+  <button class="mob-btn" onclick="mobShow('sales',this)"><span class="mob-icon">📊</span>Sales</button>
+  <button class="mob-btn" onclick="openDrawer()"><span class="mob-icon">☰</span>More</button>
+</nav>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer" onclick="if(event.target===this||event.target.classList.contains('drawer-bd'))closeDrawer()">
+  <div class="drawer-bd"></div>
+  <div class="drawer-panel">
+    <div class="drawer-handle"></div>
+    <div id="drawerContent"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let API_KEY = '';
+let currentPersona = 'music';
+let inventory = [];
+let ideas = [];
+let sales = [];
+let warTasks = {};
+let startDate = null;
+let selectedPlatforms = ['Instagram','TikTok','YouTube','Facebook','Twitter/X'];
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+function initApp() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key.startsWith('sk-ant')) {
+    alert('Please enter a valid Anthropic API key starting with sk-ant-');
+    return;
+  }
+  API_KEY = key;
+  localStorage.setItem('empire_api_key', key);
+  if (!localStorage.getItem('empire_start_date')) {
+    localStorage.setItem('empire_start_date', new Date().toISOString());
+  }
+  launchApp();
+}
+
+function launchApp() {
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('shell').style.display = 'grid';
+  loadState();
+  updateMomentum();
+  updateCountdown();
+  renderInventory();
+  renderIdeas();
+  renderSales();
+  renderWarRoom();
+  updateFocusStats();
+  checkDeadStock();
+}
+
+function loadState() {
+  API_KEY = localStorage.getItem('empire_api_key') || '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';
+  startDate = new Date(localStorage.getItem('empire_start_date') || new Date());
+  inventory = JSON.parse(localStorage.getItem('empire_inventory') || '[]');
+  ideas = JSON.parse(localStorage.getItem('empire_ideas') || '[]');
+  sales = JSON.parse(localStorage.getItem('empire_sales') || '[]');
+  warTasks = JSON.parse(localStorage.getItem('empire_war_tasks') || '{}');
+}
+
+function saveState() {
+  localStorage.setItem('empire_inventory', JSON.stringify(inventory));
+  localStorage.setItem('empire_ideas', JSON.stringify(ideas));
+  localStorage.setItem('empire_sales', JSON.stringify(sales));
+  localStorage.setItem('empire_war_tasks', JSON.stringify(warTasks));
+}
+
+function resetKey() {
+  openKeyModal();
+}
+
+function openKeyModal() {
+  const saved = localStorage.getItem('empire_api_key');
+  const display = saved ? saved.slice(0,18) + '••••••••••••••••••••' + saved.slice(-4) : 'No key saved';
+  document.getElementById('keyModalCurrent').textContent = '🔑 Current: ' + display;
+  document.getElementById('keyModalInput').value = '';
+  document.getElementById('keyModalStatus').className = 'key-modal-status';
+  document.getElementById('keyModalStatus').textContent = '';
+  document.getElementById('keyModal').classList.add('open');
+  setTimeout(() => document.getElementById('keyModalInput').focus(), 100);
+}
+
+function closeKeyModal() {
+  document.getElementById('keyModal').classList.remove('open');
+}
+
+function saveNewKey() {
+  const newKey = document.getElementById('keyModalInput').value.trim();
+  const status = document.getElementById('keyModalStatus');
+
+  if (!newKey) {
+    status.className = 'key-modal-status error';
+    status.textContent = '⚠️ Please paste a key first.';
+    return;
+  }
+  if (!newKey.startsWith('sk-ant')) {
+    status.className = 'key-modal-status error';
+    status.textContent = '⚠️ Invalid key format. Must start with sk-ant-';
+    return;
+  }
+
+  API_KEY = newKey;
+  localStorage.setItem('empire_api_key', newKey);
+  status.className = 'key-modal-status success';
+  status.textContent = '✓ Key saved successfully. Empire OS is ready.';
+
+  // Update display
+  const display = newKey.slice(0,18) + '••••••••••••••••••••' + newKey.slice(-4);
+  document.getElementById('keyModalCurrent').textContent = '🔑 Current: ' + display;
+
+  setTimeout(() => closeKeyModal(), 1800);
+}
+
+// Close modal on backdrop tap
+document.addEventListener('click', e => {
+  const modal = document.getElementById('keyModal');
+  if (e.target === modal) closeKeyModal();
+});
+
+// On load — auto launch, key is baked in
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('empire_api_key');
+  if (saved) { API_KEY = saved; }
+  launchApp();
+});
+
+// ══════════════════════════════════════════════
+// API CALL
+// ══════════════════════════════════════════════
+async function callClaude(systemPrompt, userPrompt, loadingId, outputId) {
+  const loading = document.getElementById(loadingId);
+  const output = document.getElementById(outputId);
+  loading.classList.add('show');
+  output.classList.remove('show');
+  output.querySelector('span') && (output.querySelector('span').textContent = '');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = data.content[0].text;
+    const span = output.querySelector('span') || output;
+    if (output.querySelector('span')) output.querySelector('span').textContent = text;
+    else output.insertAdjacentHTML('beforeend', `<span>${text}</span>`);
+    output.classList.add('show');
+    updateMomentum();
+    return text;
+  } catch (e) {
+    output.innerHTML = `<div class="ai-output-actions"><button class="copy-btn">Copy</button></div><span style="color:var(--danger)">Error: ${e.message}</span>`;
+    output.classList.add('show');
+  } finally {
+    loading.classList.remove('show');
+  }
+}
+
+// ══════════════════════════════════════════════
+// MODULES
+// ══════════════════════════════════════════════
+function showModule(mod) {
+  document.querySelectorAll('.module-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sb-module').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + mod).classList.add('active');
+  document.getElementById('mod-' + mod).classList.add('active');
+  closeDrawer();
+}
+
+function setPersona(p) {
+  currentPersona = p;
+  ['music','essence','lamp'].forEach(k => document.getElementById('pb-' + k).className = 'sb-persona');
+  document.getElementById('pb-' + p).classList.add('active-' + p);
+}
+
+// ══════════════════════════════════════════════
+// FOCUS ENGINE
+// ══════════════════════════════════════════════
+async function runFocusEngine() {
+  const last = document.getElementById('focusLast').value.trim();
+  const challenge = document.getElementById('focusChallenge').value.trim();
+  const invSummary = inventory.map(i => `${i.name} (${i.biz}, ${i.status}, $${i.price})`).join(', ') || 'No inventory logged';
+  const salesSummary = sales.length ? `${sales.length} sales totaling $${sales.reduce((a,s)=>a+s.amount,0)}` : 'No sales yet';
+
+  const sys = `You are the AI advisor for Empire OS — a command center for D'eaun Young who runs 3 businesses: H.N.I Beatz (hip hop/soul/lo-fi beat production), Collective Essence (handmade jewelry), and a Lamp Business (artisan handmade lamps). D'eaun is solo, restarting with no current sales, and needs the first sale within 30 days. Be direct, specific, and motivating. No fluff.`;
+  const usr = `Today's status:
+- Last worked on: ${last || 'not specified'}
+- Biggest challenge: ${challenge || 'not specified'}
+- Inventory: ${invSummary}
+- Sales: ${salesSummary}
+- Ideas in vault: ${ideas.length}
+
+Give me:
+1. TOP PRIORITY TODAY (one specific action, which business, why)
+2. QUICK WIN (something under 30 mins that could generate a sale or lead today)
+3. CONTENT MOVE (one specific post idea for any platform)
+4. HIDDEN OPPORTUNITY (something I might be overlooking across my 3 businesses)
+5. MOMENTUM TIP (how to stay consistent today as a solo operator)
+
+Be brutally specific. Name products. Name platforms. Give real tactics.`;
+
+  await callClaude(sys, usr, 'focus-loading', 'focus-output');
+  updateMomentum();
+}
+
+// ══════════════════════════════════════════════
+// CONTENT FACTORY
+// ══════════════════════════════════════════════
+function togglePlatform(el) {
+  el.classList.toggle('active');
+  const p = el.dataset.p;
+  if (selectedPlatforms.includes(p)) selectedPlatforms = selectedPlatforms.filter(x => x !== p);
+  else selectedPlatforms.push(p);
+}
+
+async function runContentFactory() {
+  const biz = document.getElementById('cfBiz').value;
+  const type = document.getElementById('cfType').value;
+  const product = document.getElementById('cfProduct').value.trim();
+  const detail = document.getElementById('cfDetail').value.trim();
+
+  if (!product) { document.getElementById('content-warning').classList.add('show'); return; }
+  document.getElementById('content-warning').classList.remove('show');
+
+  const container = document.getElementById('platformOutputs');
+  container.innerHTML = '';
+  document.getElementById('content-loading').classList.add('show');
+
+  const sys = `You are a top-tier social media strategist for Empire OS. You write platform-native content that drives sales and builds audiences. You understand music production culture, handmade jewelry buyers, and interior design audiences. Always write in an authentic voice — never corporate, never generic.`;
+  const usr = `Create content for each platform listed. Business: ${biz}. Type: ${type}. Product/Beat: ${product}. Key detail: ${detail || 'not specified'}.
+
+For EACH of these platforms: ${selectedPlatforms.join(', ')}
+
+Write:
+PLATFORM: [name]
+CAPTION: [full caption, platform-appropriate length and tone]
+HOOKS: [2 alternative opening lines]
+HASHTAGS: [10-15 relevant hashtags]
+BEST TIME: [best day/time to post]
+---
+
+Make each one feel native to that platform. Instagram = aesthetic + story. TikTok = punchy hook first. YouTube = keyword-rich. Facebook = conversational. Twitter/X = sharp and concise.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        system: sys,
+        messages: [{ role: 'user', content: usr }]
+      })
+    });
+    const data = await res.json();
+    document.getElementById('content-loading').classList.remove('show');
+    if (data.error) throw new Error(data.error.message);
+    const text = data.content[0].text;
+
+    // Parse by platform
+    const sections = text.split(/PLATFORM:/i).filter(Boolean);
+    sections.forEach(section => {
+      const lines = section.trim().split('\n');
+      const pName = lines[0].trim().replace(/[-:]/g,'').trim();
+      const div = document.createElement('div');
+      div.className = 'platform-output show';
+      div.innerHTML = `
+        <div class="platform-header">
+          <div class="platform-name">${pName}</div>
+          <button class="copy-btn" onclick="copyText(this.parentElement.parentElement.querySelector('.platform-text').textContent)">Copy</button>
+        </div>
+        <div class="platform-text">${lines.slice(1).join('\n').trim()}</div>
+      `;
+      container.appendChild(div);
+    });
+    updateMomentum();
+  } catch(e) {
+    document.getElementById('content-loading').classList.remove('show');
+    container.innerHTML = `<div style="color:var(--danger);font-size:.83rem">Error: ${e.message}</div>`;
+  }
+}
+
+function clearContent() {
+  document.getElementById('platformOutputs').innerHTML = '';
+}
+
+// ══════════════════════════════════════════════
+// BEAT LAB
+// ══════════════════════════════════════════════
+function dragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
+function dragLeave() { document.getElementById('dropZone').classList.remove('drag-over'); }
+function dropFile(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) processAudioFile(file);
+}
+function fileSelected(e) { if (e.target.files[0]) processAudioFile(e.target.files[0]); }
+
+function processAudioFile(file) {
+  const name = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+  document.getElementById('beatName').value = name;
+  const info = document.getElementById('fileInfo');
+  document.getElementById('fileInfoText').textContent = `File: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB) — Name extracted for AI analysis`;
+  info.style.display = 'block';
+}
+
+async function runBeatLab() {
+  const name = document.getElementById('beatName').value.trim();
+  const bpm = document.getElementById('beatBpm').value.trim();
+  const vibe = document.getElementById('beatVibe').value.trim();
+  const artist = document.getElementById('beatArtist').value.trim();
+
+  if (!name) { alert('Enter a beat name'); return; }
+
+  const sys = `You are a professional music marketing expert and beat analyst specializing in hip hop, soul, lo-fi, boom bap, and trap. You help independent producers maximize revenue from their beats through strategic SEO, licensing, and platform optimization. Be specific and professional.`;
+  const usr = `Analyze and generate a complete marketing package for this beat:
+
+Beat Name: ${name}
+BPM: ${bpm || 'unknown — estimate based on style'}
+Style/Vibe: ${vibe || 'analyze from name'}
+Target Artist: ${artist || 'general hip hop / R&B artists'}
+
+Generate:
+
+🔍 BEAT DNA
+- Genre classification (be specific)
+- Estimated BPM range
+- Mood tags (5-8 descriptors)
+- Best artist type fits
+
+📺 YOUTUBE SEO PACKAGE
+- Optimized title (include BPM, genre, key descriptors)
+- Full description (200 words, keyword-rich)
+- Tags list (20 tags)
+
+🎵 BEATSTARS/AIRBIT LISTING
+- Listing title
+- Description (100 words)
+- Search tags (15 tags)
+
+💰 LICENSING PITCH (for DMs)
+- Short pitch (under 80 words, confident)
+
+📱 SOCIAL MEDIA HOOK
+- Instagram caption
+- TikTok hook line (first 3 seconds)
+
+📈 PRICING RECOMMENDATION
+- Lease price suggestion
+- Premium lease suggestion
+- Exclusive buyout range
+- Why (based on style/market)`;
+
+  await callClaude(sys, usr, 'beat-loading', 'beat-output');
+}
+
+// ══════════════════════════════════════════════
+// INVENTORY
+// ══════════════════════════════════════════════
+function addInventory() {
+  const name = document.getElementById('invName').value.trim();
+  const biz = document.getElementById('invBiz').value;
+  const price = parseFloat(document.getElementById('invPrice').value) || 0;
+  const qty = parseInt(document.getElementById('invQty').value) || 1;
+  const status = document.getElementById('invStatus').value;
+  if (!name) return;
+  inventory.push({ id: Date.now(), name, biz, price, qty, status, lastPush: null, added: new Date().toISOString() });
+  saveState();
+  renderInventory();
+  checkDeadStock();
+  document.getElementById('invName').value = '';
+  document.getElementById('invPrice').value = '';
+  document.getElementById('invQty').value = '';
+}
+
+function markPushed(id) {
+  const item = inventory.find(i => i.id === id);
+  if (item) { item.lastPush = new Date().toISOString(); saveState(); renderInventory(); checkDeadStock(); }
+}
+
+function deleteInv(id) {
+  inventory = inventory.filter(i => i.id !== id);
+  saveState();
+  renderInventory();
+}
+
+function renderInventory() {
+  const body = document.getElementById('invBody');
+  if (!inventory.length) {
+    body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem;font-size:.83rem">No inventory yet.</td></tr>';
+    return;
+  }
+  body.innerHTML = inventory.map(item => {
+    const daysSince = item.lastPush ? Math.floor((Date.now() - new Date(item.lastPush)) / 86400000) : null;
+    const dotClass = item.status === 'Ready to sell' ? 'dot-ready' : item.status === 'Low stock' ? 'dot-low' : item.status === 'Out of stock' ? 'dot-out' : 'dot-pending';
+    return `<tr>
+      <td style="font-weight:500">${item.name}</td>
+      <td><span class="badge badge-${item.biz.includes('Beatz')?'music':item.biz.includes('Essence')?'essence':'lamp'}" style="font-size:.58rem">${item.biz.split(' ')[0]}</span></td>
+      <td style="color:var(--success);font-family:'Syne',sans-serif">$${item.price}</td>
+      <td>${item.qty}</td>
+      <td><span class="status-dot ${dotClass}"></span>${item.status}</td>
+      <td style="color:${daysSince===null?'var(--text3)':daysSince>7?'var(--danger)':'var(--text2)'}">
+        ${daysSince === null ? 'Never' : daysSince === 0 ? 'Today' : `${daysSince}d ago`}
+        ${daysSince === null || daysSince > 0 ? `<button onclick="markPushed(${item.id})" style="margin-left:6px;background:var(--bg4);border:1px solid var(--border);border-radius:3px;color:var(--text3);font-size:.65rem;padding:1px 5px;cursor:pointer">✓ Push</button>` : ''}
+      </td>
+      <td><button class="idea-del" onclick="deleteInv(${item.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+  updateFocusStats();
+}
+
+function checkDeadStock() {
+  const dead = inventory.filter(i => {
+    if (!i.lastPush) return (Date.now() - new Date(i.added)) / 86400000 > 7;
+    return (Date.now() - new Date(i.lastPush)) / 86400000 > 7;
+  });
+  const container = document.getElementById('deadStockAlerts');
+  if (dead.length) {
+    container.innerHTML = `<div class="tip" style="border-color:rgba(224,120,120,.2);color:var(--danger);background:rgba(224,120,120,.05)">
+      <span>🚨</span>
+      <span><strong>Dead Stock Alert:</strong> ${dead.map(d=>d.name).join(', ')} ${dead.length>1?'have':'has'} had no content push in 7+ days. Go to Content Factory and post about ${dead.length>1?'them':'it'} today.</span>
+    </div>`;
+    document.getElementById('mod-inventory').querySelector('.mod-badge') || 
+      document.getElementById('mod-inventory').insertAdjacentHTML('beforeend',`<span class="mod-badge">${dead.length}</span>`);
+  } else { container.innerHTML = ''; }
+}
+
+async function runInventoryAI() {
+  const summary = inventory.map(i => `${i.name} (${i.biz}, qty:${i.qty}, $${i.price}, status:${i.status})`).join('\n') || 'No inventory logged';
+  const sys = `You are a product and pricing strategist for 3 small businesses: handmade jewelry, beat production, and artisan lamps. Be direct and actionable.`;
+  const usr = `Analyze my current inventory and give me pricing and restock advice:\n${summary}\n\nProvide:\n1. PRICING OPPORTUNITIES (am I undercharging anywhere?)\n2. RESTOCK PRIORITIES (what should I make/upload next?)\n3. BUNDLE IDEAS (what products work together for higher cart value?)\n4. DEAD WEIGHT (anything I should discontinue or reprice?)\n5. QUICK WIN (what single item should I push hardest this week and why?)`;
+  await callClaude(sys, usr, 'inv-loading', 'inv-output');
+}
+
+// ══════════════════════════════════════════════
+// IDEAS
+// ══════════════════════════════════════════════
+function addIdea() {
+  const text = document.getElementById('ideaInput').value.trim();
+  if (!text) return;
+  ideas.unshift({ id: Date.now(), text, time: new Date().toLocaleDateString(), biz: detectBiz(text) });
+  saveState();
+  renderIdeas();
+  document.getElementById('ideaInput').value = '';
+  updateFocusStats();
+}
+
+function detectBiz(text) {
+  const t = text.toLowerCase();
+  if (t.match(/beat|sample|bpm|track|loop|mix|record|rap|song|music|sound/)) return 'music';
+  if (t.match(/jewel|ring|necklace|bracelet|crystal|gem|pendant|chain|earring/)) return 'essence';
+  if (t.match(/lamp|light|bulb|shade|wire|cord|decor/)) return 'lamp';
+  return 'general';
+}
+
+function deleteIdea(id) {
+  ideas = ideas.filter(i => i.id !== id);
+  saveState();
+  renderIdeas();
+}
+
+function renderIdeas() {
+  const list = document.getElementById('ideaList');
+  if (!ideas.length) { list.innerHTML = '<p style="font-size:.82rem;color:var(--text3)">Vault is empty. Start capturing ideas.</p>'; return; }
+  list.innerHTML = ideas.map(idea => `
+    <div class="idea-item">
+      <div class="idea-content">
+        <div class="idea-text">${idea.text}</div>
+        <div class="idea-meta">${idea.time} · <span class="badge badge-${idea.biz==='music'?'music':idea.biz==='essence'?'essence':idea.biz==='lamp'?'lamp':'gold'}" style="font-size:.58rem">${idea.biz}</span></div>
+      </div>
+      <button class="idea-del" onclick="deleteIdea(${idea.id})">✕</button>
+    </div>
+  `).join('');
+}
+
+async function runIdeaAnalysis() {
+  if (!ideas.length) { alert('Add some ideas first.'); return; }
+  const sys = `You are a business strategist for a solo entrepreneur running 3 businesses: H.N.I Beatz (beats), Collective Essence (jewelry), and a Lamp Business. Goal: first sale within 30 days.`;
+  const usr = `Here are my captured ideas:\n${ideas.map((i,n)=>`${n+1}. [${i.biz}] ${i.text}`).join('\n')}\n\nPrioritize them:\n1. TOP 3 IDEAS TO ACT ON THIS WEEK (most revenue potential, fastest to execute)\n2. IDEAS TO DEVELOP NEXT MONTH\n3. HIDDEN GEM (an idea that seems small but could be bigger than it looks)\n4. CROSS-BUSINESS SYNERGY (any ideas that could work across multiple businesses?)\n5. ONE IDEA TO DROP (not worth your time right now)`;
+  await callClaude(sys, usr, 'idea-loading', 'idea-output');
+}
+
+// ══════════════════════════════════════════════
+// VIDEO BRIEF
+// ══════════════════════════════════════════════
+async function runVideoBrief() {
+  const biz = document.getElementById('vidBiz').value;
+  const format = document.getElementById('vidFormat').value;
+  const idea = document.getElementById('vidIdea').value.trim();
+  const goal = document.getElementById('vidGoal').value;
+  const tone = document.getElementById('vidTone').value;
+  if (!idea) { alert('Describe your video idea first.'); return; }
+
+  const sys = `You are a top-tier video director and content strategist who specializes in short-form content for independent creators and small business owners. You write briefs that are immediately filmable — no vague instructions, everything is specific.`;
+  const usr = `Create a complete video brief for this content:
+
+Business: ${biz}
+Format: ${format}
+Idea: ${idea}
+Goal: ${goal}
+Tone: ${tone}
+
+Write:
+
+🎬 VIDEO BRIEF: [Title]
+
+HOOK (first 3 seconds): [exact words to say or show]
+
+SCRIPT OUTLINE:
+[Timestamp] — [What to say/show]
+(Full breakdown, every 5-10 seconds)
+
+B-ROLL LIST:
+[Specific shots to capture]
+
+ON-SCREEN TEXT: [Key text overlays]
+
+AUDIO/MUSIC VIBE: [What kind of background music or sound]
+
+CAPTION: [Ready-to-post caption with hashtags]
+
+CALL TO ACTION: [Exact CTA for end of video]
+
+POSTING STRATEGY: [Platform, time, how to boost it]
+
+PRO TIP: [One thing that will make this video perform better than average]`;
+
+  await callClaude(sys, usr, 'video-loading', 'video-output');
+}
+
+// ══════════════════════════════════════════════
+// SALES PULSE
+// ══════════════════════════════════════════════
+function logSale() {
+  const biz = document.getElementById('saleBiz').value;
+  const item = document.getElementById('saleItem').value.trim();
+  const amount = parseFloat(document.getElementById('saleAmount').value) || 0;
+  if (!item) return;
+  sales.unshift({ id: Date.now(), biz, item, amount, date: new Date().toLocaleDateString() });
+  saveState();
+  renderSales();
+  document.getElementById('saleItem').value = '';
+  document.getElementById('saleAmount').value = '';
+  updateMomentum();
+}
+
+function renderSales() {
+  const list = document.getElementById('saleList');
+  const total = sales.reduce((a, s) => a + s.amount, 0);
+  document.getElementById('totalRevenue').textContent = '$' + total.toFixed(0);
+  document.getElementById('totalSales').textContent = sales.length;
+
+  // Top biz
+  const byBiz = {};
+  sales.forEach(s => { byBiz[s.biz] = (byBiz[s.biz] || 0) + s.amount; });
+  const top = Object.entries(byBiz).sort((a,b) => b[1]-a[1])[0];
+  document.getElementById('topBizStat').textContent = top ? top[0].split(' ')[0] : '—';
+
+  if (!sales.length) { list.innerHTML = '<p style="font-size:.82rem;color:var(--text3);padding:.5rem">No sales logged yet.</p>'; return; }
+  list.innerHTML = sales.map(s => `
+    <div class="sale-item">
+      <span class="badge badge-${s.biz.includes('Beatz')?'music':s.biz.includes('Essence')?'essence':'lamp'}" style="font-size:.58rem">${s.biz.split(' ')[0]}</span>
+      <span>${s.item}</span>
+      <span style="font-size:.72rem;color:var(--text3)">${s.date}</span>
+      <span class="sale-amount">+$${s.amount}</span>
+    </div>
+  `).join('');
+  updateFocusStats();
+}
+
+async function runSalesAI() {
+  if (!sales.length) { alert('Log some sales or inquiries first.'); return; }
+  const sys = `You are a revenue strategist for a solo entrepreneur running 3 businesses. Be specific, direct, data-driven.`;
+  const usr = `Sales data:\n${sales.map(s=>`${s.date}: ${s.biz} — ${s.item} — $${s.amount}`).join('\n')}\n\nAnalyze:\n1. BEST PERFORMING BUSINESS (and why to double down)\n2. BEST PERFORMING PRODUCT (replicate this)\n3. REVENUE GAPS (what's not selling that should be?)\n4. PRICING PATTERNS (any signs of undercharging or overpricing?)\n5. NEXT 30 DAYS FORECAST (realistic revenue target based on this data)\n6. ONE MOVE (single highest-leverage action to increase revenue this week)`;
+  await callClaude(sys, usr, 'sales-loading', 'sales-output');
+}
+
+// ══════════════════════════════════════════════
+// WAR ROOM
+// ══════════════════════════════════════════════
+const warPlan = {
+  'Week 1 — First Sale Sprint (Days 1-7)': [
+    { task: 'List 3 jewelry items on Etsy with AI-generated descriptions', biz: 'essence' },
+    { task: 'Upload 3 beats to BeatStars with full SEO package', biz: 'music' },
+    { task: 'Post 1 product reel on Instagram for jewelry', biz: 'essence' },
+    { task: 'DM 5 artists on Instagram with your beat licensing offer', biz: 'music' },
+    { task: 'Create and post a TikTok beat-making video', biz: 'music' },
+    { task: 'Post lamp photo on Instagram with pricing in caption', biz: 'lamp' },
+    { task: 'Run the Focus Engine every morning this week', biz: 'general' }
+  ],
+  'Week 2 — Content Machine (Days 8-14)': [
+    { task: 'Use Content Factory: generate 5-platform drop for a jewelry piece', biz: 'essence' },
+    { task: 'Post a beat rollout plan — use Beat Intelligence Lab', biz: 'music' },
+    { task: 'Respond to every comment and DM within 24 hours', biz: 'general' },
+    { task: 'Film a jewelry packaging/unboxing video — post to Reels + TikTok', biz: 'essence' },
+    { task: 'Pitch a lamp to 3 interior design accounts via DM', biz: 'lamp' },
+    { task: 'Add 5 more inventory items with pricing', biz: 'general' },
+    { task: 'Create a YouTube video: beat breakdown for H.N.I Beatz', biz: 'music' }
+  ],
+  'Week 3 — Audience Build (Days 15-21)': [
+    { task: 'Go live on Instagram — show your creative process', biz: 'general' },
+    { task: 'Post 3x this week across all businesses', biz: 'general' },
+    { task: 'Launch a limited-time jewelry bundle offer', biz: 'essence' },
+    { task: 'Upload 5 new beats — use Beat Lab for all', biz: 'music' },
+    { task: 'Capture and post a lamp creation time-lapse', biz: 'lamp' },
+    { task: 'Log every sale and inquiry in Sales Pulse', biz: 'general' },
+    { task: 'Use Idea Vault — AI prioritize this week\'s best move', biz: 'general' }
+  ],
+  'Week 4 — Brand Momentum (Days 22-30)': [
+    { task: 'Run AI Sales Analysis — identify top product', biz: 'general' },
+    { task: 'Create a \"story behind the brand\" post for all 3 businesses', biz: 'general' },
+    { task: 'Set up a simple website landing page (Carrd or Linktree)', biz: 'general' },
+    { task: 'Post a customer testimonial or showcase a sold piece', biz: 'essence' },
+    { task: 'Release a beat with full YouTube + BeatStars SEO', biz: 'music' },
+    { task: 'Draft wholesale pitch for a local boutique for lamps/jewelry', biz: 'lamp' },
+    { task: 'Review your 30-day momentum — plan month 2', biz: 'general' }
+  ]
+};
+
+function renderWarRoom() {
+  const container = document.getElementById('warRoomContent');
+  let totalTasks = 0, doneTasks = 0;
+  container.innerHTML = Object.entries(warPlan).map(([week, tasks]) => {
+    totalTasks += tasks.length;
+    const taskHTML = tasks.map((t, i) => {
+      const key = `${week}-${i}`;
+      const done = warTasks[key];
+      if (done) doneTasks++;
+      return `<div class="war-task ${done?'done':''}" onclick="toggleTask('${key}',this)">
+        <div class="war-check">${done?'✓':''}</div>
+        <span>${t.task}</span>
+        <span class="war-biz badge badge-${t.biz==='music'?'music':t.biz==='essence'?'essence':t.biz==='lamp'?'lamp':'gold'}" style="font-size:.58rem">${t.biz}</span>
+      </div>`;
+    }).join('');
+    return `<div class="war-week">
+      <div class="war-week-title">📅 ${week}</div>
+      <div class="war-tasks">${taskHTML}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('wr-done').textContent = doneTasks;
+  document.getElementById('wr-pct').textContent = Math.round((doneTasks/totalTasks)*100) + '%';
+  updateFocusStats();
+}
+
+function toggleTask(key, el) {
+  warTasks[key] = !warTasks[key];
+  saveState();
+  el.classList.toggle('done');
+  el.querySelector('.war-check').textContent = warTasks[key] ? '✓' : '';
+  renderWarRoom();
+  updateMomentum();
+}
+
+async function runWarRoomAI() {
+  const done = Object.values(warTasks).filter(Boolean).length;
+  const total = Object.keys(warPlan).reduce((a,w)=>a+warPlan[w].length,0);
+  const sys = `You are a business coach for a solo entrepreneur restarting 3 businesses with a 90-day plan.`;
+  const usr = `My 30-day war room status: ${done}/${total} tasks completed. Sales: ${sales.length} totaling $${sales.reduce((a,s)=>a+s.amount,0)}. Inventory items: ${inventory.length}. Ideas captured: ${ideas.length}.\n\nGive me:\n1. HONEST ASSESSMENT (am I on track for first sale?)\n2. WHAT TO PRIORITIZE THIS WEEK (top 3 moves)\n3. WHAT TO SKIP (what tasks aren't worth my time right now?)\n4. 60-DAY PREVIEW (what should months 2-3 look like?)\n5. MINDSET NOTE (one thing to keep me going as a solo operator)`;
+  await callClaude(sys, usr, 'warroom-loading', 'warroom-output');
+}
+
+// ══════════════════════════════════════════════
+// MOMENTUM + COUNTDOWN
+// ══════════════════════════════════════════════
+function updateMomentum() {
+  const score = Math.min(100, 
+    (sales.length * 15) + 
+    (ideas.length * 3) + 
+    (inventory.length * 5) + 
+    (Object.values(warTasks).filter(Boolean).length * 4)
+  );
+  document.getElementById('momentumScore').textContent = score;
+  document.getElementById('momentumScore').style.color = score > 70 ? 'var(--success)' : score > 40 ? 'var(--gold)' : 'var(--danger)';
+}
+
+function updateCountdown() {
+  const start = new Date(localStorage.getItem('empire_start_date') || new Date());
+  const day = Math.min(30, Math.floor((Date.now() - start) / 86400000) + 1);
+  document.getElementById('dayCount').textContent = day;
+  document.getElementById('wr-day').textContent = day;
+}
+
+function updateFocusStats() {
+  document.getElementById('focusSalesCount').textContent = sales.length;
+  document.getElementById('focusIdeasCount').textContent = ideas.length;
+  const done = Object.values(warTasks).filter(Boolean).length;
+  document.getElementById('focusTaskCount').textContent = done;
+}
+
+// ══════════════════════════════════════════════
+// COPY / UTILS
+// ══════════════════════════════════════════════
+function copyEl(id) {
+  const text = document.getElementById(id).querySelector('span')?.textContent || document.getElementById(id).textContent;
+  copyText(text);
+  const btn = document.getElementById(id).querySelector('.copy-btn');
+  if (btn) { btn.textContent = '✓ Copied'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000); }
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+  });
+}
+
+// ══════════════════════════════════════════════
+// MOBILE
+// ══════════════════════════════════════════════
+function mobShow(mod, btn) {
+  document.querySelectorAll('.mob-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showModule(mod);
+}
+
+function openDrawer() {
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="sb-label">More Modules</div>
+    <button class="sb-module" onclick="mobDrawerShow('ideas')"><span class="mod-icon">💡</span> Idea Vault</button>
+    <button class="sb-module" onclick="mobDrawerShow('video')"><span class="mod-icon">🎬</span> Video Brief</button>
+    <button class="sb-module" onclick="mobDrawerShow('warroom')"><span class="mod-icon">🗓</span> 90-Day War Room</button>
+    <hr class="sb-divider">
+    <div class="sb-label">Business</div>
+    <button class="sb-persona" onclick="setPersona('music');closeDrawer()">🎵 H.N.I Beatz</button>
+    <button class="sb-persona" onclick="setPersona('essence');closeDrawer()">🌿 Collective Essence</button>
+    <button class="sb-persona" onclick="setPersona('lamp');closeDrawer()">💡 Lamp Business</button>
+  `;
+  document.getElementById('drawer').classList.add('open');
+}
+
+function mobDrawerShow(mod) {
+  showModule(mod);
+  closeDrawer();
+  document.querySelectorAll('.mob-btn').forEach(b => b.classList.remove('active'));
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+  if ((e.metaKey||e.ctrlKey) && e.key==='Enter') {
+    const active = document.querySelector('.module-view.active');
+    if (active?.id === 'view-focus') runFocusEngine();
+    else if (active?.id === 'view-content') runContentFactory();
+    else if (active?.id === 'view-beat') runBeatLab();
+  }
+});
+</script>
+</body>
+</html>
