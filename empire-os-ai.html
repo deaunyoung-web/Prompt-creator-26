@@ -912,14 +912,72 @@ window.addEventListener('load', () => {
 // ══════════════════════════════════════════════
 // API CALL
 // ══════════════════════════════════════════════
-async function callClaude(systemPrompt, userPrompt, loadingId, outputId) {
-  const loading = document.getElementById(loadingId);
-  const output = document.getElementById(outputId);
-  loading.classList.add('show');
-  output.classList.remove('show');
-  output.querySelector('span') && (output.querySelector('span').textContent = '');
+async function async function callClaude(systemPrompt, userPrompt, loadingId, outputId) {
+    const loading = document.getElementById(loadingId);
+    const output = document.getElementById(outputId);
+    
+    // 1. Trigger Loading UI
+    loading.classList.add('show');
+    output.classList.remove('show');
+    if (output.querySelector('span')) {
+        output.querySelector('span').textContent = '';
+    }
 
-  try {
+    // 2. Grab the Key (Change 'empireApiKey' if your local storage name is different!)
+    const savedKey = localStorage.getItem('empireApiKey') || localStorage.getItem('apiKey'); 
+    
+    if (!savedKey) {
+        alert("No API key found! Please save your key in the app first.");
+        loading.classList.remove('show');
+        return;
+    }
+
+    // 3. The Proxy Middleman
+    const proxyUrl = 'https://corsproxy.io/?';
+    const anthropicUrl = encodeURIComponent('https://api.anthropic.com/v1/messages');
+
+    // 4. Secure Fetch to Anthropic
+    try {
+        const response = await fetch(proxyUrl + anthropicUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': savedKey,
+                'anthropic-version': '2023-06-01',
+                'anthropic-dangerously-allow-browser': 'true'
+            },
+            body: JSON.stringify({
+                model: "claude-3-haiku-20240307", 
+                max_tokens: 1024,
+                system: systemPrompt,
+                messages: [
+                    { role: "user", content: userPrompt }
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // 5. Update UI with AI Output
+        loading.classList.remove('show');
+        output.classList.add('show');
+        
+        const aiText = data.content[0].text;
+        if (output.querySelector('span')) {
+            // Converts line breaks so the AI's formatting looks good on screen
+            output.querySelector('span').innerHTML = aiText.replace(/\n/g, '<br>'); 
+        }
+
+    } catch (error) {
+        console.error("Fetch failed:", error);
+        loading.classList.remove('show');
+        alert("Connection failed. Check your API key or network.");
+    }
+}
     const res = await // 1. We wrap the Anthropic API url in a reliable public CORS proxy
 const proxyUrl = 'https://corsproxy.io/?';
 const anthropicUrl = encodeURIComponent('https://api.anthropic.com/v1/messages');
