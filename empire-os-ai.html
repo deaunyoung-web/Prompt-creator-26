@@ -828,7 +828,14 @@ function launchApp() {
 }
 
 function loadState() {
-  API_KEY = localStorage.getItem('empire_api_key') || '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';
+  // Safely check for the key without a hardcoded fallback
+  API_KEY = localStorage.getItem('empire_api_key') || '';
+  
+  // If no key is found, trigger the modal so the user can enter their own
+  if (!API_KEY) {
+    openKeyModal();
+  }
+
   startDate = new Date(localStorage.getItem('empire_start_date') || new Date());
   inventory = JSON.parse(localStorage.getItem('empire_inventory') || '[]');
   ideas = JSON.parse(localStorage.getItem('empire_ideas') || '[]');
